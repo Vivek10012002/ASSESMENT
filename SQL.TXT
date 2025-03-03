@@ -1,0 +1,77 @@
+--1)
+
+CREATE TABLE DEPARTMENT_DETAILS
+(
+DEPARTMENT_ID NUMBER PRIMARY KEY,
+DEPARTMENT_NAME VARCHAR2(50),
+HOD VARCHAR2(50));
+
+CREATE TABLE COURSE_DETAILS
+(
+COURSEID NUMBER PRIMARY KEY,
+COURSE_NAME VARCHAR2(50),
+DEPARTMENT_ID NUMBER REFERENCES DEPARTMENT_DETAILS
+(DEPARTMENT_ID)
+);
+
+
+INSERT INTO DEPARTMENT_DETAILS values
+    (1, 'FINANCE', 'Davies');
+    
+
+INSERT INTO COURSE_DETAILS (COURSEID, COURSE_NAME, DEPARTMENT_ID)
+VALUES 
+    (100, 'Data Science', 20),
+    (200, 'AI', 20),
+    (300,'Financial service',10);
+
+
+--select * from department_details;
+
+--select * from course_details;
+
+
+select d.department_id,c.courseid from department_details d
+join course_details c
+on d.department_id=c.department_id;
+
+
+--2)
+
+CREATE TABLE TEACHER (
+    TEACHER_ID INT PRIMARY KEY,   -- PRIMARY KEY
+    TEACHER_NAME VARCHAR(100) NOT NULL,  -- NOT NULL
+    SUBJECT VARCHAR(50) NOT NULL UNIQUE  -- UNIQUE CONSTRAINT
+);
+
+CREATE TABLE STUDENT (
+    STUDENT_ID INT PRIMARY KEY,  -- PRIMARY KEY
+    STUDENT_NAME VARCHAR(100) NOT NULL,  -- NOT NULL
+    COURSE VARCHAR(50) NOT NULL,
+    MARKS INT CHECK (MARKS >= 0 AND MARKS <= 100),  -- CHECK CONSTRAINT (marks should be between 0-100)
+    TEACHER_ID INT,  -- Foreign Key to link with TEACHER table
+    FOREIGN KEY (TEACHER_ID) REFERENCES TEACHER(TEACHER_ID)  -- FOREIGN KEY
+);
+
+------
+-- Insert data into TEACHER table
+INSERT INTO TEACHER (TEACHER_ID, TEACHER_NAME, SUBJECT) VALUES
+(1, 'JOY', 'Mathematics'),
+(2, 'JOHN', 'Physics'),
+(3, 'Brown', 'Chemistry');
+
+-- Insert data into STUDENT table
+INSERT INTO STUDENT (STUDENT_ID, STUDENT_NAME, COURSE, MARKS, TEACHER_ID) VALUES
+(101, 'ALIA', 'Mathematics', 85, 1),
+(102, 'Baba', 'Physics', 90, 2),
+(103, 'Charlie', 'Chemistry', 78, 3),
+(104, 'Davies', 'Mathematics', 95, 1);
+---------
+SELECT 
+    S.STUDENT_NAME, 
+    S.COURSE, 
+    S.MARKS, 
+    S.TEACHER_ID, 
+    T.TEACHER_NAME
+FROM STUDENT S
+JOIN TEACHER T ON S.TEACHER_ID = T.TEACHER_ID;
